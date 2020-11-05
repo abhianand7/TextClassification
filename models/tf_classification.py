@@ -55,7 +55,7 @@ def train(input_df: pd.DataFrame, model: Model, epochs: int, batch_size: int, nu
     :param num_classes:
     :return:
     """
-    print(input_df.head())
+    # print(input_df.head())
     x = input_df['Utterance'].values.tolist()
     y = input_df['Intent'].values.tolist()
 
@@ -68,12 +68,12 @@ def train(input_df: pd.DataFrame, model: Model, epochs: int, batch_size: int, nu
 
     x = [np.asarray(i).astype('float32').reshape(1, -1) for i in x]
     x = np.asarray(x)
-    print(x.shape)
+    # print(x.shape)
 
     y = to_categorical(y, num_classes=num_classes)
     y = [np.asarray(i).reshape(1, -1) for i in y]
     y = np.asarray(y)
-    print(y.shape)
+    # print(y.shape)
 
     callbacks = list()
     early_stop = EarlyStopping(monitor='loss', patience=3, restore_best_weights=True, min_delta=0.001, verbose=1)

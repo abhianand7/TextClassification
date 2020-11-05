@@ -33,7 +33,7 @@ class Main:
         self.num_classes = None
         self.model = None
 
-    def run(self, model_save_path: str) -> Model:
+    def run(self, model_save_path: Union[str, None], encoder_save_path: Union[str, None]) -> Model:
         """
         :param model_save_path:
         :return:
@@ -49,8 +49,13 @@ class Main:
         self.model = tf_classification.create_model(input_len=768, num_classes=self.num_classes)
 
         self.model = tf_classification.train(df, self.model, epochs=10, batch_size=8, num_classes=self.num_classes)
+        if model_save_path:
+            self.model.save(model_save_path)
 
-        self.model.save(model_save_path)
+        if encoder_save_path:
+            with open(encoder_save_path, 'wb') as fobj:
+                pickle.dump(self.encoder, fobj)
+
         return self.model
 
     def test_model(self, input_text: str, model_path: Union[str, None]):
@@ -79,7 +84,7 @@ if __name__ == '__main__':
         encoder_file_path='label_encoder.pkl'
     )
     # to train the model again uncomment the below line
-    # main_func.run('model.h5')
+    # main_func.run(None, None)
     while True:
         input_text = input("Input Text: ")
         predicted_class = main_func.test_model(input_text=input_text, model_path='model.h5')
